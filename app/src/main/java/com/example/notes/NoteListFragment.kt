@@ -11,7 +11,7 @@ import android.view.ViewGroup
 
 class NoteListFragment : Fragment() {
 
-    private var NotesArray : ArrayList<NoteListItem> = ArrayList<NoteListItem>()
+    private var notesArray : ArrayList<NoteListItem> = ArrayList<NoteListItem>()
     private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,12 +21,14 @@ class NoteListFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        // TODO: get note info from somewhere and put into NotesList
-        NotesArray.add(NoteListItem("Groceries", NoteType.written, 0))
-        NotesArray.add(NoteListItem("School Note", NoteType.written, 1))
-        NotesArray.add(NoteListItem("??????", NoteType.audio, 2))
-        NotesArray.add(NoteListItem("??????", NoteType.audio, 3))
-        NotesArray.add(NoteListItem("funnee", NoteType.drawing, 4))
+        // TODO: get note info from somewhere and put into NotesArray
+        notesArray.add(NoteListItem("Groceries", NoteType.written, 0))
+        notesArray.add(NoteListItem("School Note", NoteType.written, 1))
+        notesArray.add(NoteListItem("??????", NoteType.audio, 2))
+        notesArray.add(NoteListItem("??????", NoteType.audio, 3))
+        notesArray.add(NoteListItem("funnee", NoteType.drawing, 4))
+
+
     }
 
     override fun onCreateView(
@@ -42,7 +44,7 @@ class NoteListFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyNoteListRecyclerViewAdapter(NotesArray)
+                adapter = MyNoteListRecyclerViewAdapter(notesArray)
             }
         }
         return view

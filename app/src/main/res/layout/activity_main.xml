@@ -29,7 +29,7 @@
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/newNoteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
