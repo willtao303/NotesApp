@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/NewNoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Note" />
+
+    <EditText
+        android:id="@+id/NewNoteName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text"
+        android:minHeight="48dp" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:minHeight="48dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+    <Button
+        android:id="@+id/CreateNewNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:text="Create" />
+
+</LinearLayout>

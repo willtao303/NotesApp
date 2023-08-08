@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.example.notes.databinding.FragmentNotesListItemBinding
 
 class MyNoteListRecyclerViewAdapter(
-    private val values: List<NoteListItem>
+    private val values: List<NoteInfo>
 ) : RecyclerView.Adapter<MyNoteListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,8 +25,8 @@ class MyNoteListRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.name
-        holder.contentView.text = item.getType()
+        holder.idView.text = item.noteName
+        holder.contentView.text = item.noteType
     }
 
     override fun getItemCount(): Int = values.size

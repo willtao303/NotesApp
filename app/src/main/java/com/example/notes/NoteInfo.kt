@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName="note_table")
 data class NoteInfo(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "creation_time") val noteTime: Int,
@@ -17,6 +17,15 @@ data class NoteInfo(
     @ColumnInfo(name = "secondary_file") val secondaryFile: String?
 ){
 
+}
+
+class NoteType {
+    companion object {
+        const val written = 0
+        const val audio = 1
+        const val drawing = 2
+        val typeToString = arrayOf<String>("Text Note", "Audio Note", "Drawn Note")
+    }
 }
 /* sample table info
 id creation_time creation_user note_starred note_name
