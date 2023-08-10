@@ -11,7 +11,7 @@ data class NoteInfo(
     @ColumnInfo(name = "creation_user") val noteUser: String,
     @ColumnInfo(name = "note_starred") val noteStarred: Boolean = false,
     @ColumnInfo(name = "note_name") val noteName: String?,
-    @ColumnInfo(name = "note_type") val noteType: String?,
+    @ColumnInfo(name = "note_type") val noteType: Int?,
     //filepath
     @ColumnInfo(name = "primary_file") val primaryFile: String?,
     @ColumnInfo(name = "secondary_file") val secondaryFile: String?

@@ -9,10 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import kotlinx.coroutines.runBlocking
 
-class NoteListFragment (_noteDatabase : NoteDAO, currentProfile: String): Fragment() {
+class NoteListFragment (_noteDatabase : NoteRepository, currentProfile: String): Fragment() {
 
-    private lateinit var notesArray : List<NoteInfo>
+    private var notesArray : List<NoteInfo> = emptyList()
     private var columnCount = 1
     private var profile : String = currentProfile
     private var noteDatabase = _noteDatabase
@@ -25,7 +26,9 @@ class NoteListFragment (_noteDatabase : NoteDAO, currentProfile: String): Fragme
         }
 
         // TODO: get note info from somewhere and put into NotesArray
-        notesArray = noteDatabase.getAllNotes(profile)
+        runBlocking {
+            notesArray = noteDatabase.getUserNotes(profile)
+        }
 
 
     }
@@ -63,7 +66,7 @@ class NoteListFragment (_noteDatabase : NoteDAO, currentProfile: String): Fragme
         const val ARG_COLUMN_COUNT = "column-count"
         const val columnCount = 1
         @JvmStatic
-        fun newInstance(NoteDatabase : NoteDAO, CurrentProfile : String) =
+        fun newInstance(NoteDatabase : NoteRepository, CurrentProfile : String) =
             NoteListFragment(NoteDatabase, CurrentProfile).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)

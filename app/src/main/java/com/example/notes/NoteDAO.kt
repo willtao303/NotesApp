@@ -1,5 +1,6 @@
 package com.example.notes
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.OnConflictStrategy
 
@@ -14,16 +15,18 @@ const val TABLE = "note_table";
 interface NoteDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(noteInfo: NoteInfo)
+    suspend fun insertNote(noteInfo: NoteInfo)
 
     @Update
-    fun updateNote(noteInfo:NoteInfo)
+    suspend fun updateNote(noteInfo:NoteInfo)
 
     @Delete
-    fun deleteNote(noteInfo: NoteInfo)
+    suspend fun deleteNote(noteInfo: NoteInfo)
+
+    @Query("SELECT * FROM $TABLE ORDER BY creation_user DESC, note_starred DESC, creation_time DESC")
+    suspend fun getAllNotes(): List<NoteInfo>
 
     @Query("SELECT * FROM $TABLE WHERE creation_user LIKE :user ORDER BY note_starred DESC, creation_time DESC")
-    fun getAllNotes(user: String): List<NoteInfo>
-
+    suspend fun getUserNotes(user: String): List<NoteInfo>
 
 }
