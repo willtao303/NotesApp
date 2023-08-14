@@ -1,6 +1,8 @@
 package com.example.notes
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,28 +10,42 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ListView
-import kotlinx.coroutines.runBlocking
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 
-class NoteListFragment (_noteDatabase : NoteRepository, currentProfile: String): Fragment() {
+class NoteListFragment (_noteDatabase : NoteDataViewModel): Fragment() {
 
-    private var notesArray : List<NoteInfo> = emptyList()
     private var columnCount = 1
-    private var profile : String = currentProfile
     private var noteDatabase = _noteDatabase
+    private var notesList : LiveData<List<NoteInfo>> = noteDatabase.liveNoteList
+    private lateinit var notesAdapter: NotesListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var tempList = ArrayList<NoteInfo>()
+        tempList.addAll(notesList.value?:listOf<NoteInfo>(
+            NoteInfo("time A", "user", true, "note num 1", NoteType.written, null, null),
+            NoteInfo("time B", "user", false, "note num 2", NoteType.written, null, null),
+            NoteInfo("time C", "user", false, "note num 3", NoteType.written, null, null),
+        ))
+
+        notesAdapter = NotesListAdapter(requireContext(), tempList)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        // TODO: get note info from somewhere and put into NotesArray
-        runBlocking {
-            notesArray = noteDatabase.getUserNotes(profile)
-        }
+        //Log.d("tag", notesList.value.toString())
 
+        notesList.observe( this, Observer<List<NoteInfo>> {
+            newNotesList -> run {
+                notesAdapter.setNoteList(newNotesList)
+                Log.d("Database", "aaa -- $newNotesList ===== ")
+            }
+        })
 
     }
 
@@ -40,23 +56,23 @@ class NoteListFragment (_noteDatabase : NoteRepository, currentProfile: String):
         val view = inflater.inflate(R.layout.fragment_notes_list, container, false)
 
         // Set the adapter
-        if (view is RecyclerView) {
+        if (view is ListView) {
             with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MyNoteListRecyclerViewAdapter(notesArray)
+                adapter = notesAdapter
+                Log.d("asdfhashdruilskd", adapter.count.toString())
             }
         }
 
-        var listView = view.findViewById<ListView>(R.id.notes_list)
 
-        listView.setOnItemClickListener { _, _, i, _ ->  {
-            // index database using i and retrieve note type + note info based on note type -> store in NoteInfo struct
-            // val newTextNote = TextNoteFragment.newInstance(newNoteInfo.name, newNoteInfo)
-        }}
+        val listView = view.findViewById<ListView>(R.id.notes_list)
 
+        listView.setOnItemClickListener { _, _, i, _ ->
+            run {
+                Log.d("TAG", "item $i clicked")
+                // index database using i and retrieve note type + note info based on note type -> store in NoteInfo struct
+                // val newTextNote = TextNoteFragment.newInstance(newNoteInfo.name, newNoteInfo)
+            }
+        }
 
         return view
     }
@@ -66,11 +82,21 @@ class NoteListFragment (_noteDatabase : NoteRepository, currentProfile: String):
         const val ARG_COLUMN_COUNT = "column-count"
         const val columnCount = 1
         @JvmStatic
-        fun newInstance(NoteDatabase : NoteRepository, CurrentProfile : String) =
-            NoteListFragment(NoteDatabase, CurrentProfile).apply {
+        fun newInstance(NoteDatabase: NoteDataViewModel) =
+            NoteListFragment(NoteDatabase).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
     }
+
 }
+
+
+
+
+
+
+
+
+

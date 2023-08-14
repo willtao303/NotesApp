@@ -23,10 +23,13 @@ interface NoteDAO {
     @Delete
     suspend fun deleteNote(noteInfo: NoteInfo)
 
-    @Query("SELECT * FROM $TABLE ORDER BY creation_user DESC, note_starred DESC, creation_time DESC")
-    suspend fun getAllNotes(): List<NoteInfo>
+    @Query("SELECT * FROM $TABLE ORDER BY creation_user DESC, note_starred DESC")
+    suspend fun getAllNotesNonLive(): List<NoteInfo>
 
-    @Query("SELECT * FROM $TABLE WHERE creation_user LIKE :user ORDER BY note_starred DESC, creation_time DESC")
-    suspend fun getUserNotes(user: String): List<NoteInfo>
+    @Query("SELECT * FROM $TABLE ORDER BY creation_user DESC, note_starred DESC")
+    fun getAllNotes(): LiveData<List<NoteInfo>>
+
+    @Query("SELECT * FROM $TABLE WHERE creation_user LIKE :user ORDER BY note_starred DESC")
+    fun getUserNotes(user: String): LiveData<List<NoteInfo>>
 
 }

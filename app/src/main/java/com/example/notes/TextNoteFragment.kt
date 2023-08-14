@@ -5,10 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import java.util.Calendar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_NOTE_NAME = "current_note_name"
 private const val ARG_NOTE_ID = "current_note_id"
 
 /**
@@ -16,17 +15,14 @@ private const val ARG_NOTE_ID = "current_note_id"
  * Use the [TextNoteFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TextNoteFragment () : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var name: String? = null
-    private var id: Int? = null;
+class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
+    private var id: String? = null;
     //private var info: TextNoteInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            name = it.getString(ARG_NOTE_NAME)
-            id = it.getInt(ARG_NOTE_ID)
+            id = it.getString(ARG_NOTE_ID)
         }
 
         // get info from database off of id
@@ -48,12 +44,32 @@ class TextNoteFragment () : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(note_name: String, note_id: Int) =
-            TextNoteFragment().apply {
+        fun newInstance(note_data: NoteDataViewModel, note_id: Int) =
+            TextNoteFragment(note_data).apply {
                 arguments = Bundle().apply {
-                    putString(ARG_NOTE_NAME, note_name)
                     putInt(ARG_NOTE_ID, note_id)
                 }
             }
+
+        @JvmStatic
+        fun newInstance(note_data: NoteDataViewModel) =
+            TextNoteFragment(note_data).apply {
+                val noteId = createNote()
+                arguments = Bundle().apply {
+                    putString(ARG_NOTE_ID, noteId)
+                }
+            }
+    }
+
+
+    fun createNote(): String{
+        val timeInstance = Calendar.getInstance()
+        val newNote = NoteInfo(timeInstance.time.toString(), note_data.getUser(), false, "Untitled Note", NoteType.written, null, null)
+        note_data.insertNote(newNote)
+
+        return newNote.noteTime
+    }
+    fun submitNote(){
+
     }
 }

@@ -6,17 +6,19 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName="note_table")
 data class NoteInfo(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "creation_time") val noteTime: Int,
+    @PrimaryKey() val noteTime: String,
     @ColumnInfo(name = "creation_user") val noteUser: String,
-    @ColumnInfo(name = "note_starred") val noteStarred: Boolean = false,
-    @ColumnInfo(name = "note_name") val noteName: String?,
+    @ColumnInfo(name = "note_starred") var noteStarred: Boolean = false,
+    @ColumnInfo(name = "note_name") var noteName: String?,
     @ColumnInfo(name = "note_type") val noteType: Int?,
     //filepath
     @ColumnInfo(name = "primary_file") val primaryFile: String?,
     @ColumnInfo(name = "secondary_file") val secondaryFile: String?
 ){
-
+    @Override
+    override fun toString(): String {
+        return "<${if(noteStarred){"★"}else{"✰"}}$noteName by $noteUser at $noteTime>\n"
+    }
 }
 
 class NoteType {
