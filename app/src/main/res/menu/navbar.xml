@@ -2,14 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/noteslist"
+        android:id="@+id/notesList"
+        android:icon="@drawable/ic_navbar_list"
         android:title="List" />
     <item
-        android:id="@+id/option2"
+        android:id="@+id/profilesList"
+        android:icon="@drawable/ic_navbar_profile"
         android:title="Profiles" />
     <item
-        android:id="@+id/option3"
-        android:title="Settings"/>
+        android:id="@+id/SettingsList"
+        android:icon="@drawable/ic_navbar_settings"
+        android:title="Settings" />
         <!--android:icon=""-->
 
 </menu>

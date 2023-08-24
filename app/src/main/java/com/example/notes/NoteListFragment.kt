@@ -26,12 +26,6 @@ class NoteListFragment (_noteDatabase : NoteDataViewModel): Fragment() {
         super.onCreate(savedInstanceState)
 
         var tempList = ArrayList<NoteInfo>()
-        tempList.addAll(notesList.value?:listOf<NoteInfo>(
-            NoteInfo("time A", "user", true, "note num 1", NoteType.written, null, null),
-            NoteInfo("time B", "user", false, "note num 2", NoteType.written, null, null),
-            NoteInfo("time C", "user", false, "note num 3", NoteType.written, null, null),
-        ))
-
         notesAdapter = NotesListAdapter(requireContext(), tempList)
 
         arguments?.let {

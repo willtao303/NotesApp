@@ -1,23 +1,44 @@
 package com.example.notes
 
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Calendar
+import java.util.UUID
 
 @Entity(tableName="note_table")
 data class NoteInfo(
-    @PrimaryKey() val noteTime: String,
+    @PrimaryKey() val noteId: String,
+    @ColumnInfo(name = "note_time") val noteTime: String,
     @ColumnInfo(name = "creation_user") val noteUser: String,
     @ColumnInfo(name = "note_starred") var noteStarred: Boolean = false,
     @ColumnInfo(name = "note_name") var noteName: String?,
     @ColumnInfo(name = "note_type") val noteType: Int?,
     //filepath
-    @ColumnInfo(name = "primary_file") val primaryFile: String?,
+    @ColumnInfo(name = "primary_file") var primaryFile: String?,
     @ColumnInfo(name = "secondary_file") val secondaryFile: String?
 ){
     @Override
     override fun toString(): String {
         return "<${if(noteStarred){"★"}else{"✰"}}$noteName by $noteUser at $noteTime>\n"
+    }
+
+    companion object {
+
+        fun createEmptyTextNote(user: String): NoteInfo {
+            val timeInstance = Calendar.getInstance()
+            return NoteInfo(
+                UUID.randomUUID().toString(),
+                timeInstance.time.toString(),
+                user,
+                false,
+                "Untitled Note",
+                NoteType.written,
+                null,
+                null
+            )
+        }
     }
 }
 

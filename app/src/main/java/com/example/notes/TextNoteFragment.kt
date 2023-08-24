@@ -1,12 +1,15 @@
 package com.example.notes
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import java.util.Calendar
+import android.widget.TextView
+import java.io.File
+import java.io.FileInputStream
 
 private const val ARG_NOTE_ID = "current_note_id"
 
@@ -16,8 +19,10 @@ private const val ARG_NOTE_ID = "current_note_id"
  * create an instance of this fragment.
  */
 class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
-    private var id: String? = null;
-    //private var info: TextNoteInfo? = null
+
+    private var id: String? = null
+    private var note: NoteInfo? = null
+    private var mainFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,13 +30,41 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             id = it.getString(ARG_NOTE_ID)
         }
 
-        // get info from database off of id
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_text_note, container, false)
+        val view = inflater.inflate(R.layout.fragment_text_note, container, false)
 
+
+        val textBody = view.findViewById<TextView>(R.id.textNoteEditorMainBody)
+        if (mainFile != null){
+            textBody.text =  FileInputStream(mainFile).bufferedReader().use {it.readText()}
+        } else {
+            textBody.text =  "Error Reading Attached Note.txt File"
+        }
+
+        return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val fileDir = File(context.filesDir, note_data.getUser())
+        fileDir.mkdirs()
+
+        if (note != null) {
+            if (note!!.primaryFile != null){
+                mainFile = File(fileDir, note!!.primaryFile)
+            } else {
+                note!!.primaryFile =  "${note!!.noteId}.txt"
+                mainFile = File(fileDir, note!!.primaryFile)
+                mainFile!!.writeText("")
+                Log.d("File", "Created a file at ${mainFile!!.absolutePath}")
+            }
+        }
     }
 
     companion object {
@@ -42,33 +75,18 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
          * @param note_name Name of the TextNote.
          * @return A new instance of fragment TextNoteFragment.
          */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(note_data: NoteDataViewModel, note_id: Int) =
-            TextNoteFragment(note_data).apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_NOTE_ID, note_id)
-                }
-            }
-
         @JvmStatic
         fun newInstance(note_data: NoteDataViewModel) =
             TextNoteFragment(note_data).apply {
-                val noteId = createNote()
                 arguments = Bundle().apply {
-                    putString(ARG_NOTE_ID, noteId)
                 }
             }
     }
 
-
-    fun createNote(): String{
-        val timeInstance = Calendar.getInstance()
-        val newNote = NoteInfo(timeInstance.time.toString(), note_data.getUser(), false, "Untitled Note", NoteType.written, null, null)
-        note_data.insertNote(newNote)
-
-        return newNote.noteTime
+    fun setNote(newNote: NoteInfo){
+        note = newNote
     }
+
     fun submitNote(){
 
     }

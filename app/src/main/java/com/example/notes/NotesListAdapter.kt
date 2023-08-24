@@ -18,17 +18,17 @@ class NotesListAdapter(ctx: Context, private var values: ArrayList<NoteInfo>): A
     @Override
     override fun getView(index: Int, _view: View?, parent: ViewGroup) : View {
         var tileView = _view
-        var note : NoteInfo? = getItem(index)
+        val note : NoteInfo? = getItem(index)
         if (tileView == null) {
             tileView = LayoutInflater.from(context).inflate(R.layout.fragment_notes_list_item, parent, false);
         }
         tileView!!
 
-        var name : TextView = tileView.findViewById(R.id.note_name)
-        var type : TextView = tileView.findViewById(R.id.note_type)
+        val name : TextView = tileView.findViewById(R.id.note_name)
+        val type : TextView = tileView.findViewById(R.id.note_timestamp)
 
         name.text = note?.noteName
-        type.text = NoteType.typeToString[note?.noteType?:0]
+        type.text = note?.noteTime
 
         return tileView
     }
