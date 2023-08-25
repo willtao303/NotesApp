@@ -49,6 +49,8 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
         return view
     }
 
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -67,12 +69,22 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
         }
     }
 
+    override fun onStop() {
+
+        val textBody = requireView().findViewById<TextView>(R.id.textNoteEditorMainBody)
+        Log.d("text", textBody.text.toString())
+        if (mainFile != null){
+            mainFile!!.writeText(textBody.text.toString())
+        }
+
+        super.onStop()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param note_name Name of the TextNote.
          * @return A new instance of fragment TextNoteFragment.
          */
         @JvmStatic
@@ -87,7 +99,6 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
         note = newNote
     }
 
-    fun submitNote(){
-
+    fun saveNote(){
     }
 }

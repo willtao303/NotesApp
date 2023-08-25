@@ -4,15 +4,15 @@
     <item
         android:id="@+id/notesList"
         android:icon="@drawable/ic_navbar_list"
-        android:title="List" />
+        android:title="@string/navbar_list" />
     <item
         android:id="@+id/profilesList"
         android:icon="@drawable/ic_navbar_profile"
-        android:title="Profiles" />
+        android:title="@string/navbar_profiles" />
     <item
         android:id="@+id/SettingsList"
         android:icon="@drawable/ic_navbar_settings"
-        android:title="Settings" />
+        android:title="@string/navbar_settings" />
         <!--android:icon=""-->
 
 </menu>

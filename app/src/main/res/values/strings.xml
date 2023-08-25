@@ -3,4 +3,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="text_note_editor_hint">Tap here to type your note</string>
+
+    <string name="none"></string>
+    <string name="navbar_list">Notes</string>
+    <string name="navbar_profiles">Profiles</string>
+    <string name="navbar_settings">Settings</string>
 </resources>
