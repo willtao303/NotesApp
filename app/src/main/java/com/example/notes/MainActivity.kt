@@ -1,13 +1,16 @@
 package com.example.notes
 
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import com.example.notes.databinding.ActivityMainBinding
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageButton
+import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // Setup fragment and main screen
-        val noteListFragment : NoteListFragment = NoteListFragment.newInstance(noteViewModel)
+        val noteListFragment = NoteListFragment.newInstance(noteViewModel)
         changeAppBar(noteListFragment)
         fragmentManager.commit {add(R.id.frame, noteListFragment)}
 
@@ -52,23 +55,54 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-        val textNoteEditorFragment = TextNoteFragment.newInstance(noteViewModel)
-        val newNoteButton : ImageButton = findViewById(R.id.newNoteButton)
+        val newNoteButton = findViewById<FloatingActionButton>(R.id.newNoteButton)
+        val newTextNoteButton = findViewById<Button>(R.id.newTextNoteButton)
+        val newAudioNoteButton = findViewById<Button>(R.id.newAudioNoteButton)
+        val otherNoteButtons = findViewById<View>(R.id.otherNoteButtons)
+        val notNewNoteButton = findViewById<Button>(R.id.notNewNoteButton)
 
         newNoteButton.setOnClickListener {
+            otherNoteButtons.visibility = View.VISIBLE
+        }
+        notNewNoteButton.setOnClickListener{
+            otherNoteButtons.visibility = View.GONE
+        }
 
-            //TODO: make spinner for text note or audio note option, double click for text note shortcut + dialog for note creation
-            // dialog needs note name + note color???? + create button + cancel button
-            val newTextNote = NoteInfo.createEmptyTextNote(notesRepo.getUser())
-            textNoteEditorFragment.setNote(newTextNote)
-            changeFrameFragment(textNoteEditorFragment)
-            noteViewModel.insertNote(newTextNote)
+
+        newTextNoteButton.setOnClickListener {
+            val textNoteEditorFragment = TextNoteFragment.newInstance(noteViewModel)
+            val dialog = Dialog(this)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.new_note_dialog)
+
+            val submitNewTextNoteButton = dialog.findViewById<Button>(R.id.createNewNote);
+            submitNewTextNoteButton.setOnClickListener{
+                val newNoteName = dialog.findViewById<TextView>(R.id.newNoteName).text.toString()
+                val newTextNote = if (newNoteName.isNotEmpty()){
+                    NoteInfo.createEmptyTextNote(notesRepo.getUser(), newNoteName)
+                } else {
+                    NoteInfo.createEmptyTextNote(notesRepo.getUser(), "Untitled Note")
+                }
+                noteViewModel.insertNote(newTextNote)
+                textNoteEditorFragment.setNote(newTextNote)
+                changeFrameFragment(textNoteEditorFragment)
+
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+
+        val backButton = findViewById<ImageView>(R.id.appbarBack)
+        backButton.setOnClickListener {
+            //fragmentManager.popBackStackImmediate()
+            changeFrameFragment(noteListFragment)
+            Log.d("Tag", "back button clicked")
 
         }
 
     }
-
 
     fun changeFrameFragment(newFragment: Fragment){
         // managing hovering button -- theres prob a better way
@@ -76,6 +110,7 @@ class MainActivity : AppCompatActivity() {
             findViewById<FloatingActionButton>(R.id.newNoteButton).visibility = View.VISIBLE
         } else {
             findViewById<FloatingActionButton>(R.id.newNoteButton).visibility = View.GONE
+            findViewById<View>(R.id.otherNoteButtons).visibility = View.GONE
         }
 
         changeAppBar(newFragment)

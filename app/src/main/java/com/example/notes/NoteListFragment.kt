@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 
 class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment() {
@@ -25,8 +26,6 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
-
-        //Log.d("tag", notesList.value.toString())
 
         notesListLive.observe(this) { newNotesList ->
             run {
@@ -48,7 +47,6 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
         if (view is ListView) {
             with(view) {
                 adapter = notesAdapter
-                Log.d("asdfhashdruilskd", adapter.count.toString())
             }
         }
 
@@ -61,10 +59,10 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
 
                 val textNoteEditorFragment = TextNoteFragment.newInstance(noteDatabase)
                 textNoteEditorFragment.setNote(notesList[i])
-                (requireActivity() as MainActivity).changeFrameFragment(textNoteEditorFragment)
 
-                // index database using i and retrieve note type + note info based on note type -> store in NoteInfo struct
-                // val newTextNote = TextNoteFragment.newInstance(newNoteInfo.name, newNoteInfo)
+                (requireActivity() as MainActivity).changeFrameFragment(textNoteEditorFragment)
+                requireActivity().findViewById<TextView>(R.id.appbarTitle).text = notesList[i].noteName
+
             }
         }
 

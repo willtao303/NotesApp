@@ -3,39 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="30dp"
+    android:layout_marginTop="16dp"
     android:layout_marginRight="30dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
     <TextView
-        android:id="@+id/NewNoteTitle"
+        android:id="@+id/newNoteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Note" />
+        android:text="@string/new_note"
+        android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/NewNoteName"
+        android:id="@+id/newNoteName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="@string/default_note_name"
         android:inputType="text"
-        android:minHeight="48dp" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:minHeight="48dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
+        android:autofillHints="" />
 
-    <Button
-        android:id="@+id/CreateNewNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text="Create" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelNewNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/createNewNote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|end"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="@string/create" />
+    </LinearLayout>
 
 </LinearLayout>

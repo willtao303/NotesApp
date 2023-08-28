@@ -33,9 +33,9 @@ class NotesListAdapter(ctx: Context, private var values: ArrayList<NoteInfo>): A
         type.text = note?.noteTime
 
         if (note?.noteType == NoteType.written){
-            //TODO: set icon based off note type
+            icon.setImageResource(R.drawable.ic_note_text)
         } else if (note?.noteType == NoteType.audio){
-            // set icon based off note type
+            icon.setImageResource(R.drawable.ic_note_audio)
         }
 
         return tileView

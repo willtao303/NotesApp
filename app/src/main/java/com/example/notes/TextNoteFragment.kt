@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import java.io.File
 import java.io.FileInputStream
@@ -29,9 +30,6 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
         arguments?.let {
             id = it.getString(ARG_NOTE_ID)
         }
-
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,6 +44,25 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             textBody.text =  "Error Reading Attached Note.txt File"
         }
 
+        val settingsButton = activity?.findViewById<ImageView>(R.id.appbarSettings)
+        settingsButton?.setOnClickListener {
+            Log.d("ButtonEvent", "settings clicked")
+        }
+
+        val deleteButton = activity?.findViewById<ImageView>(R.id.appbarDelete)
+        deleteButton?.setOnClickListener {
+            Log.d("ButtonEvent", "delete clicked")
+            if (note != null){
+                note_data.deleteNote(note!!)
+                if (mainFile != null){
+                    mainFile!!.delete()
+                    mainFile = null
+                }
+            }
+            (requireActivity() as MainActivity).changeFrameFragment(NoteListFragment(note_data))
+        }
+
+
         return view
     }
 
@@ -59,10 +76,10 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
 
         if (note != null) {
             if (note!!.primaryFile != null){
-                mainFile = File(fileDir, note!!.primaryFile)
+                mainFile = File(fileDir, note!!.primaryFile!!)
             } else {
                 note!!.primaryFile =  "${note!!.noteId}.txt"
-                mainFile = File(fileDir, note!!.primaryFile)
+                mainFile = File(fileDir, note!!.primaryFile!!)
                 mainFile!!.writeText("")
                 Log.d("File", "Created a file at ${mainFile!!.absolutePath}")
             }
@@ -72,10 +89,10 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
     override fun onStop() {
 
         val textBody = requireView().findViewById<TextView>(R.id.textNoteEditorMainBody)
-        Log.d("text", textBody.text.toString())
         if (mainFile != null){
             mainFile!!.writeText(textBody.text.toString())
         }
+        note_data.update(note!!)
 
         super.onStop()
     }
@@ -99,6 +116,4 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
         note = newNote
     }
 
-    fun saveNote(){
-    }
 }

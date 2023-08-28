@@ -26,14 +26,14 @@ data class NoteInfo(
 
     companion object {
 
-        fun createEmptyTextNote(user: String): NoteInfo {
+        fun createEmptyTextNote(user: String, name: String?): NoteInfo {
             val timeInstance = Calendar.getInstance()
             return NoteInfo(
                 UUID.randomUUID().toString(),
                 timeInstance.time.toString(),
                 user,
                 false,
-                "Untitled Note",
+                name?: "Untitled Note",
                 NoteType.written,
                 null,
                 null
