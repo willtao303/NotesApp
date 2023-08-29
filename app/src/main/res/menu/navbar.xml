@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_navbar_profile"
         android:title="@string/navbar_profiles" />
     <item
-        android:id="@+id/SettingsList"
+        android:id="@+id/settingsList"
         android:icon="@drawable/ic_navbar_settings"
         android:title="@string/navbar_settings" />
         <!--android:icon=""-->

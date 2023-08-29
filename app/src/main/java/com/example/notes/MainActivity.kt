@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         // Setup fragment and main screen
         val noteListFragment = NoteListFragment.newInstance(noteViewModel)
+        val profileListFragment = ProfileListFragment.newInstance(noteViewModel)
         changeAppBar(noteListFragment)
         fragmentManager.commit {add(R.id.frame, noteListFragment)}
 
@@ -49,9 +50,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.notesList -> {
                     changeFrameFragment(noteListFragment); true
                 } R.id.profilesList -> {
-                fragmentManager.commit {
-                    replace<option2>(R.id.frame)}; true
-                }else -> {true}
+                    changeFrameFragment(profileListFragment); true
+                } R.id.settingsList -> {
+                    changeFrameFragment(SettingsFragment.newInstance("a", "b")); true
+                }
+                else -> {true}
             }
         }
 
@@ -87,6 +90,10 @@ class MainActivity : AppCompatActivity() {
                 textNoteEditorFragment.setNote(newTextNote)
                 changeFrameFragment(textNoteEditorFragment)
 
+                dialog.dismiss()
+            }
+
+            dialog.findViewById<Button>(R.id.cancelNewNote).setOnClickListener{
                 dialog.dismiss()
             }
 
@@ -133,9 +140,11 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.appbarTitle).visibility = View.GONE
             if (newFragment is NoteListFragment){
                 findViewById<Toolbar>(R.id.toolbar).title = "Notes"
-            } /*else if (newFragment is NoteListFragment){
-                    findViewById<Toolbar>(R.id.toolbar).title = "@string/navbar_notes"
-            }*/ else {
+            } else if (newFragment is ProfileListFragment){
+                    findViewById<Toolbar>(R.id.toolbar).title = "Profiles"
+            } else if (newFragment is SettingsFragment){
+                findViewById<Toolbar>(R.id.toolbar).title = "Settings"
+            } else {
                 findViewById<Toolbar>(R.id.toolbar).title = ""
             }
         }

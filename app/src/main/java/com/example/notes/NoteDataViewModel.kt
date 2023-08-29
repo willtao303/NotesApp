@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 
 class NoteDataViewModel(_repository: NoteRepository) : ViewModel() {
     private val repository = _repository
-    var liveNoteList = repository.liveNotesList
     var liveAllNoteList = repository.liveAllNotesList
 
     fun insertNote(newNote: NoteInfo) = viewModelScope.launch{

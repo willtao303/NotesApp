@@ -31,6 +31,10 @@ class NoteRepository (database : NoteDatabase) {
     fun getUser(): String{
         return user
     }
+    fun setUser(_user: String){
+        this.user = _user
+        liveNotesList = NoteDao.getUserNotes(user)
+    }
 
     @WorkerThread
     suspend fun getAllNotesDebug(): List<NoteInfo> {

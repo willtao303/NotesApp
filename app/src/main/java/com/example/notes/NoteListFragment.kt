@@ -13,7 +13,7 @@ import androidx.lifecycle.LiveData
 class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment() {
 
     private var columnCount = 1
-    private var notesListLive : LiveData<List<NoteInfo>> = noteDatabase.liveNoteList
+    private var notesListLive : LiveData<List<NoteInfo>> = noteDatabase.liveAllNoteList
     private lateinit var notesAdapter: NotesListAdapter
     private var notesList : List<NoteInfo> = emptyList()
 
@@ -27,8 +27,9 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        notesListLive.observe(this) { newNotesList ->
+        notesListLive.observe(this) { newNotesListRaw ->
             run {
+                val newNotesList = getNotesByUser(newNotesListRaw, noteDatabase.getUser())
                 notesList = newNotesList
                 notesAdapter.setNoteList(newNotesList)
                 Log.d("Database", "aaa -- $newNotesList ===== ")
@@ -80,6 +81,16 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
+    }
+
+    private fun getNotesByUser(notesList: List<NoteInfo>, user: String): List<NoteInfo>{
+        val tempList = ArrayList<NoteInfo>()
+        for (note in notesList){
+            if (note.noteUser == user){
+                tempList.add(note)
+            }
+        }
+        return tempList.toList()
     }
 
 }
