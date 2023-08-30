@@ -9,8 +9,10 @@
 
     <ImageView
         android:id="@+id/user_list_item_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        app:tint="?colorOnPrimary"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
@@ -21,6 +23,7 @@
         android:gravity="center_vertical"
         android:textAlignment="gravity"
         android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="?colorOnPrimary"
         android:textSize="20sp"
         tools:text="User Name Here" />
 

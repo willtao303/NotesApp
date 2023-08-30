@@ -22,4 +22,6 @@
     <string name="create">Create</string>
     <string name="preference_key_users_list">usersListPrefSettings</string>
     <string name="preferences_retrieve_users">getUsers</string>
+    <string name="submit">Submit</string>
+    <string name="rename_note">Rename Note</string>
 </resources>

@@ -27,10 +27,14 @@ class NotesListAdapter(ctx: Context, private var values: ArrayList<NoteInfo>): A
 
         val icon : ImageView = tileView.findViewById(R.id.note_type)
         val name : TextView = tileView.findViewById(R.id.note_name)
-        val type : TextView = tileView.findViewById(R.id.note_timestamp)
+        val time : TextView = tileView.findViewById(R.id.note_timestamp)
+        val date : TextView = tileView.findViewById(R.id.note_datestamp)
+        val type : TextView = tileView.findViewById(R.id.note_item_type)
 
         name.text = note?.noteName
-        type.text = note?.noteTime
+        time.text = note?.noteTime
+        date.text = note?.noteDate
+        type.text = NoteType.typeToString[note!!.noteType!!]
 
         if (note?.noteType == NoteType.written){
             icon.setImageResource(R.drawable.ic_note_text)

@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                 noteViewModel.insertNote(newTextNote)
                 textNoteEditorFragment.setNote(newTextNote)
                 changeFrameFragment(textNoteEditorFragment)
+                findViewById<TextView>(R.id.appbarTitle).text = newNoteName
 
                 dialog.dismiss()
             }

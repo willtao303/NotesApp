@@ -1,15 +1,20 @@
 package com.example.notes
 
 
+import android.os.Build
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.UUID
 
 @Entity(tableName="note_table")
 data class NoteInfo(
     @PrimaryKey() val noteId: String,
+    @ColumnInfo(name = "note_date") val noteDate: String,
     @ColumnInfo(name = "note_time") val noteTime: String,
     @ColumnInfo(name = "creation_user") val noteUser: String,
     @ColumnInfo(name = "note_starred") var noteStarred: Boolean = false,
@@ -25,12 +30,14 @@ data class NoteInfo(
     }
 
     companion object {
-
+        val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a")
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM, dd yyyy")
         fun createEmptyTextNote(user: String, name: String?): NoteInfo {
-            val timeInstance = Calendar.getInstance()
+            val time = LocalDateTime.now()
             return NoteInfo(
                 UUID.randomUUID().toString(),
-                timeInstance.time.toString(),
+                time.format(dateFormat),
+                time.format(timeFormat),
                 user,
                 false,
                 name?: "Untitled Note",

@@ -55,8 +55,8 @@ class ProfileListFragment(private val notesRepo: NoteDataViewModel) : Fragment()
                         dialog.show()
                     } else {
                         notesRepo.setUser(users[i])
-                        _view.findViewById<ImageView>(R.id.user_list_item_icon).setImageResource(R.drawable.ic_profile_selected)
                         _adapterView.getChildAt(currentUserIndex).findViewById<ImageView>(R.id.user_list_item_icon).setImageResource(R.drawable.ic_profile_hollow)
+                        _view.findViewById<ImageView>(R.id.user_list_item_icon).setImageResource(R.drawable.ic_profile_selected)
                         currentUserIndex = i
                     }
                 }

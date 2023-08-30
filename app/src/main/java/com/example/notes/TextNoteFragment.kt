@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import java.io.File
@@ -44,12 +47,30 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             textBody.text =  "Error Reading Attached Note.txt File"
         }
 
-        val settingsButton = activity?.findViewById<ImageView>(R.id.appbarSettings)
+        val settingsButton = requireActivity().findViewById<ImageView>(R.id.appbarSettings)
         settingsButton?.setOnClickListener {
-            Log.d("ButtonEvent", "settings clicked")
+            val dialog = Dialog(requireActivity())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.edit_note_name_dialog)
+            val renameTextView = dialog.findViewById<TextView>(R.id.noteNewName)
+            renameTextView.text = note!!.noteName
+
+            val submitNoteRenameButton = dialog.findViewById<Button>(R.id.submitRename);
+            submitNoteRenameButton.setOnClickListener{
+                val newNoteName = renameTextView.text.toString()
+                note!!.noteName = if (newNoteName != "") {newNoteName} else {"Untitled Note"}
+                requireActivity().findViewById<TextView>(R.id.appbarTitle).text = newNoteName
+                dialog.dismiss()
+            }
+
+            dialog.findViewById<Button>(R.id.cancelRename).setOnClickListener{
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
 
-        val deleteButton = activity?.findViewById<ImageView>(R.id.appbarDelete)
+        val deleteButton = requireActivity().findViewById<ImageView>(R.id.appbarDelete)
         deleteButton?.setOnClickListener {
             Log.d("ButtonEvent", "delete clicked")
             if (note != null){
@@ -61,7 +82,6 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             }
             (requireActivity() as MainActivity).changeFrameFragment(NoteListFragment(note_data))
         }
-
 
         return view
     }
