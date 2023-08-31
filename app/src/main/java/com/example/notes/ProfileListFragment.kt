@@ -38,7 +38,6 @@ class ProfileListFragment(private val notesRepo: NoteDataViewModel) : Fragment()
             view.setOnItemClickListener { _adapterView, _view, i, _ ->
                 run {
                     if (i == users.size - 1){
-                        Log.d("a", "last item clicked")
                         val dialog = Dialog(requireActivity())
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                         dialog.setContentView(R.layout.new_user_dialog)
@@ -83,7 +82,6 @@ class ProfileListFragment(private val notesRepo: NoteDataViewModel) : Fragment()
         val importString = preferences.getString(getString(R.string.preferences_retrieve_users), null)
 
         users.clear()
-        Log.d("import 1", "'$importString'")
         if (importString != "" && importString != null){
             users.addAll(importString.split("|"))
             users.add("New User")
@@ -93,7 +91,6 @@ class ProfileListFragment(private val notesRepo: NoteDataViewModel) : Fragment()
             saveUsers(activity)
         }
 
-        Log.d("import 2", importString?:"--")
 
     }
 
@@ -101,9 +98,7 @@ class ProfileListFragment(private val notesRepo: NoteDataViewModel) : Fragment()
         users.removeLast()
         val preferences: SharedPreferences = activity.getSharedPreferences(getString(R.string.preference_key_users_list), Context.MODE_PRIVATE)
         val prefEditor = preferences.edit()
-        Log.d("export 1", "'${users.toString()}'")
         val exportString = users.joinToString("|")
-        Log.d("export 2", "'$exportString'")
         prefEditor.putString(getString(R.string.preferences_retrieve_users), exportString)
         prefEditor.apply()
         users.add("New User")

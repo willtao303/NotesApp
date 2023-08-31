@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="light_background">#FFFFFFFF</color>
+    <color name="dark_background">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
     <color name="light_primary">#E9DCFE</color>
     <color name="dark_primary">#4F378A</color>
     <color name="light_contrast">#1C1B1F</color>
     <color name="secondary">#6750A2</color>
     <color name="grey">#908C94</color>
-    <color name="dark_contrast">#E0DBEC</color>
+    <color name="dark_contrast_tint">#E0DBEC</color>
+    <color name="light_contrast_tint">#2A2830</color>
 </resources>

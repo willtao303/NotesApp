@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 class NoteDataViewModel(_repository: NoteRepository) : ViewModel() {
     private val repository = _repository
     var liveAllNoteList = repository.liveAllNotesList
+    var liveNoteList = repository.liveNotesList
 
     fun insertNote(newNote: NoteInfo) = viewModelScope.launch{
         repository.insertNote(newNote)
@@ -29,5 +30,6 @@ class NoteDataViewModel(_repository: NoteRepository) : ViewModel() {
     }
     fun setUser(newUser: String){
         repository.changeUser(newUser)
+        liveNoteList = repository.liveNotesList
     }
 }

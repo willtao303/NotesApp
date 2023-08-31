@@ -1,8 +1,11 @@
 package com.example.notes
 
 
+import android.Manifest
 import android.app.Dialog
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.os.Build
 import com.example.notes.databinding.ActivityMainBinding
 
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -78,18 +82,18 @@ class MainActivity : AppCompatActivity() {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setContentView(R.layout.new_note_dialog)
 
-            val submitNewTextNoteButton = dialog.findViewById<Button>(R.id.createNewNote);
+            val submitNewTextNoteButton = dialog.findViewById<Button>(R.id.createNewNote)
             submitNewTextNoteButton.setOnClickListener{
                 val newNoteName = dialog.findViewById<TextView>(R.id.newNoteName).text.toString()
                 val newTextNote = if (newNoteName.isNotEmpty()){
-                    NoteInfo.createEmptyTextNote(notesRepo.getUser(), newNoteName)
+                    NoteInfo.createEmptyNote(notesRepo.getUser(), newNoteName, NoteType.written)
                 } else {
-                    NoteInfo.createEmptyTextNote(notesRepo.getUser(), "Untitled Note")
+                    NoteInfo.createEmptyNote(notesRepo.getUser(), "Untitled Note", NoteType.written)
                 }
                 noteViewModel.insertNote(newTextNote)
                 textNoteEditorFragment.setNote(newTextNote)
                 changeFrameFragment(textNoteEditorFragment)
-                findViewById<TextView>(R.id.appbarTitle).text = newNoteName
+                findViewById<TextView>(R.id.appbar_title).text = newNoteName
 
                 dialog.dismiss()
             }
@@ -101,8 +105,38 @@ class MainActivity : AppCompatActivity() {
             dialog.show()
         }
 
+        newAudioNoteButton.setOnClickListener{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+                } else {
+                    Log.d("a", "${Build.VERSION.SDK_INT} -- ${Build.VERSION_CODES.S}")
+                    val audioNoteEditorFragment = AudioNoteFragment.newInstance(noteViewModel)
+                    val dialog = Dialog(this)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setContentView(R.layout.new_note_dialog)
 
-        val backButton = findViewById<ImageView>(R.id.appbarBack)
+                    val submitNewTextNoteButton = dialog.findViewById<Button>(R.id.createNewNote)
+                    submitNewTextNoteButton.setOnClickListener{
+                        val newNoteName = dialog.findViewById<TextView>(R.id.newNoteName).text.toString()
+                        val newAudioNote = if (newNoteName.isNotEmpty()){
+                            NoteInfo.createEmptyNote(notesRepo.getUser(), newNoteName, NoteType.audio)
+                        } else {
+                            NoteInfo.createEmptyNote(notesRepo.getUser(), "Untitled Note", NoteType.audio)
+                        }
+                        noteViewModel.insertNote(newAudioNote)
+                        audioNoteEditorFragment.setNote(newAudioNote)
+                        changeFrameFragment(audioNoteEditorFragment)
+                        findViewById<TextView>(R.id.appbar_title).text = newNoteName
+
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                }
+            }
+        }
+
+        val backButton = findViewById<ImageView>(R.id.appbar_back)
         backButton.setOnClickListener {
             //fragmentManager.popBackStackImmediate()
             changeFrameFragment(noteListFragment)
@@ -112,6 +146,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onNightModeChanged(mode: Int) {
+        super.onNightModeChanged(mode)
+    }
     fun changeFrameFragment(newFragment: Fragment){
         // managing hovering button -- theres prob a better way
         if (newFragment is NoteListFragment){
@@ -126,19 +163,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeAppBar(newFragment: Fragment){
-        if (newFragment is TextNoteFragment){
-            findViewById<ImageView>(R.id.appbarBack).visibility = View.VISIBLE
-            findViewById<ImageView>(R.id.appbarDelete).visibility = View.VISIBLE
-            findViewById<ImageView>(R.id.appbarSettings).visibility = View.VISIBLE
+        if (newFragment is TextNoteFragment || newFragment is AudioNoteFragment){
+            findViewById<ImageView>(R.id.appbar_back).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.appbar_delete).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.appbar_settings).visibility = View.VISIBLE
 
-            findViewById<TextView>(R.id.appbarTitle).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.appbar_title).visibility = View.VISIBLE
             findViewById<Toolbar>(R.id.toolbar).title = ""
         } else {
-            findViewById<ImageView>(R.id.appbarBack).visibility = View.GONE
-            findViewById<ImageView>(R.id.appbarDelete).visibility = View.GONE
-            findViewById<ImageView>(R.id.appbarSettings).visibility = View.GONE
+            findViewById<ImageView>(R.id.appbar_back).visibility = View.GONE
+            findViewById<ImageView>(R.id.appbar_delete).visibility = View.GONE
+            findViewById<ImageView>(R.id.appbar_settings).visibility = View.GONE
 
-            findViewById<TextView>(R.id.appbarTitle).visibility = View.GONE
+            findViewById<TextView>(R.id.appbar_title).visibility = View.GONE
             if (newFragment is NoteListFragment){
                 findViewById<Toolbar>(R.id.toolbar).title = "Notes"
             } else if (newFragment is ProfileListFragment){

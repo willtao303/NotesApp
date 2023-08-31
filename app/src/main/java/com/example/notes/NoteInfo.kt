@@ -32,7 +32,7 @@ data class NoteInfo(
     companion object {
         val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a")
         val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM, dd yyyy")
-        fun createEmptyTextNote(user: String, name: String?): NoteInfo {
+        fun createEmptyNote(user: String, name: String?, type: Int): NoteInfo {
             val time = LocalDateTime.now()
             return NoteInfo(
                 UUID.randomUUID().toString(),
@@ -41,7 +41,7 @@ data class NoteInfo(
                 user,
                 false,
                 name?: "Untitled Note",
-                NoteType.written,
+                type,
                 null,
                 null
             )

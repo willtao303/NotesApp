@@ -27,13 +27,10 @@ class NoteRepository (database : NoteDatabase) {
 
     fun changeUser(newUser : String){
         user = newUser
+        liveNotesList = NoteDao.getUserNotes(user)
     }
     fun getUser(): String{
         return user
-    }
-    fun setUser(_user: String){
-        this.user = _user
-        liveNotesList = NoteDao.getUserNotes(user)
     }
 
     @WorkerThread

@@ -18,22 +18,17 @@ import java.io.FileInputStream
 private const val ARG_NOTE_ID = "current_note_id"
 
 /**
- * A simple [Fragment] subclass.
- * Use the [TextNoteFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * A [Fragment] subclass for text notes.
  */
 class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
 
-    private var id: String? = null
+    //private var id: String? = null
     private var note: NoteInfo? = null
     private var mainFile: File? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            id = it.getString(ARG_NOTE_ID)
-        }
-    }
+    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -47,7 +42,7 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             textBody.text =  "Error Reading Attached Note.txt File"
         }
 
-        val settingsButton = requireActivity().findViewById<ImageView>(R.id.appbarSettings)
+        val settingsButton = requireActivity().findViewById<ImageView>(R.id.appbar_settings)
         settingsButton?.setOnClickListener {
             val dialog = Dialog(requireActivity())
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -59,7 +54,7 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             submitNoteRenameButton.setOnClickListener{
                 val newNoteName = renameTextView.text.toString()
                 note!!.noteName = if (newNoteName != "") {newNoteName} else {"Untitled Note"}
-                requireActivity().findViewById<TextView>(R.id.appbarTitle).text = newNoteName
+                requireActivity().findViewById<TextView>(R.id.appbar_title).text = newNoteName
                 dialog.dismiss()
             }
 
@@ -70,7 +65,7 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
             dialog.show()
         }
 
-        val deleteButton = requireActivity().findViewById<ImageView>(R.id.appbarDelete)
+        val deleteButton = requireActivity().findViewById<ImageView>(R.id.appbar_delete)
         deleteButton?.setOnClickListener {
             Log.d("ButtonEvent", "delete clicked")
             if (note != null){
@@ -119,9 +114,6 @@ class TextNoteFragment (private val note_data: NoteDataViewModel) : Fragment() {
 
     companion object {
         /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
          * @return A new instance of fragment TextNoteFragment.
          */
         @JvmStatic

@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +14,7 @@ import androidx.lifecycle.LiveData
 class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment() {
 
     private var columnCount = 1
-    private var notesListLive : LiveData<List<NoteInfo>> = noteDatabase.liveAllNoteList
+    private var notesListLive : LiveData<List<NoteInfo>> = noteDatabase.liveNoteList
     private lateinit var notesAdapter: NotesListAdapter
     private var notesList : List<NoteInfo> = emptyList()
 
@@ -26,10 +27,10 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
-
-        notesListLive.observe(this) { newNotesListRaw ->
+        notesListLive = noteDatabase.liveNoteList
+        notesListLive.observe(this) { newNotesList ->
             run {
-                val newNotesList = getNotesByUser(newNotesListRaw, noteDatabase.getUser())
+                //val newNotesList = getNotesByUser(newNotesListRaw, noteDatabase.getUser())
                 notesList = newNotesList
                 notesAdapter.setNoteList(newNotesList)
                 Log.d("Database", "aaa -- $newNotesList ===== ")
@@ -56,13 +57,23 @@ class NoteListFragment (private var noteDatabase : NoteDataViewModel): Fragment(
 
         listView.setOnItemClickListener { _, _, i, _ ->
             run {
-                Log.d("TAG", "item $i clicked")
+                Log.d("NoteListFragment", "item $i clicked")
 
-                val textNoteEditorFragment = TextNoteFragment.newInstance(noteDatabase)
-                textNoteEditorFragment.setNote(notesList[i])
+                if (notesList[i].noteType == NoteType.written){
+                    val textNoteEditorFragment = TextNoteFragment.newInstance(noteDatabase)
+                    textNoteEditorFragment.setNote(notesList[i])
 
-                (requireActivity() as MainActivity).changeFrameFragment(textNoteEditorFragment)
-                requireActivity().findViewById<TextView>(R.id.appbarTitle).text = notesList[i].noteName
+                    (requireActivity() as MainActivity).changeFrameFragment(textNoteEditorFragment)
+                } else if (notesList[i].noteType == NoteType.audio){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val audioNoteEditorFragment = AudioNoteFragment.newInstance(noteDatabase)
+                        audioNoteEditorFragment.setNote(notesList[i])
+                        (requireActivity() as MainActivity).changeFrameFragment(audioNoteEditorFragment)
+                    }
+
+                }
+
+                requireActivity().findViewById<TextView>(R.id.appbar_title).text = notesList[i].noteName
 
             }
         }

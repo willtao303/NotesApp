@@ -31,14 +31,18 @@ class NotesListAdapter(ctx: Context, private var values: ArrayList<NoteInfo>): A
         val date : TextView = tileView.findViewById(R.id.note_datestamp)
         val type : TextView = tileView.findViewById(R.id.note_item_type)
 
-        name.text = note?.noteName
-        time.text = note?.noteTime
-        date.text = note?.noteDate
-        type.text = NoteType.typeToString[note!!.noteType!!]
+        if (note!!.noteName!!.length <= 25){
+            name.text = note.noteName
+        } else {
+            name.text = note.noteName!!.subSequence(0, 25).toString() + "..."
+        }
+        time.text = note.noteTime
+        date.text = note.noteDate
+        type.text = NoteType.typeToString[note.noteType!!]
 
-        if (note?.noteType == NoteType.written){
+        if (note.noteType == NoteType.written){
             icon.setImageResource(R.drawable.ic_note_text)
-        } else if (note?.noteType == NoteType.audio){
+        } else if (note.noteType == NoteType.audio){
             icon.setImageResource(R.drawable.ic_note_audio)
         }
 

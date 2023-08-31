@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp">
+    android:layout_marginBottom="4dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -23,7 +26,7 @@
             android:id="@+id/note_datestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="0dp"
             android:text="00:00:00"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@android:color/darker_gray"
@@ -75,14 +78,13 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:contentDescription="note type icon"
-        app:tint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:tint="?colorOnPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
